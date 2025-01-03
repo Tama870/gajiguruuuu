@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Penggajian Guru</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        form div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: inline-block;
+            background: #35424a;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #e8491d;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .output p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Sistem Penggajian Guru</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <form id="payrollForm">
+            <div>
+                <label for="idGuru">ID Guru:</label>
+                <input type="text" id="idGuru" name="idGuru" required>
+            </div>
+            <div>
+                <label for="namaGuru">Nama Guru:</label>
+                <input type="text" id="namaGuru" name="namaGuru" required>
+            </div>
+            <div>
+                <label for="jabatan">Jabatan:</label>
+                <input type="text" id="jabatan" name="jabatan" required>
+            </div>
+            <div>
+                <label for="gajiPokok">Gaji Pokok (Rp):</label>
+                <input type="number" id="gajiPokok" name="gajiPokok" required>
+            </div>
+            <div>
+                <label for="tunjanganAnak">Tunjangan Anak (Rp):</label>
+                <input type="number" id="tunjanganAnak" name="tunjanganAnak">
+            </div>
+            <div>
+                <label for="tunjanganJabatan">Tunjangan Jabatan (Rp):</label>
+                <input type="number" id="tunjanganJabatan" name="tunjanganJabatan">
+            </div>
+            <div>
+                <label for="tunjanganPasangan">Tunjangan Pasangan (Rp):</label>
+                <input type="number" id="tunjanganPasangan" name="tunjanganPasangan">
+            </div>
+            <div>
+                <label for="asuransiKesehatan">Asuransi Kesehatan (Rp):</label>
+                <input type="number" id="asuransiKesehatan" name="asuransiKesehatan">
+            </div>
+            <div>
+                <label for="asuransiKematian">Asuransi Kematian (Rp):</label>
+                <input type="number" id="asuransiKematian" name="asuransiKematian">
+            </div>
+            <button type="button" onclick="calculateSalary()">Hitung Gaji</button>
+        </form>
+
+        <div class="output" id="output" style="display: none;">
+            <h2>Hasil Perhitungan</h2>
+            <p id="outputIdGuru"></p>
+            <p id="outputNamaGuru"></p>
+            <p id="outputJabatan"></p>
+            <p id="outputGajiPokok"></p>
+            <p id="outputTunjanganAnak"></p>
+            <p id="outputTunjanganJabatan"></p>
+            <p id="outputTunjanganPasangan"></p>
+            <p id="outputAsuransiKesehatan"></p>
+            <p id="outputAsuransiKematian"></p>
+            <p id="totalGaji"></p>
+            <p id="gajiBersih"></p>
+        </div>
+    </div>
+
+    <script>
+        function formatRupiah(value) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateSalary() {
+            const idGuru = document.getElementById('idGuru').value;
+            const namaGuru = document.getElementById('namaGuru').value;
+            const jabatan = document.getElementById('jabatan').value;
+            const gajiPokok = parseFloat(document.getElementById('gajiPokok').value) || 0;
+            const tunjanganAnak = parseFloat(document.getElementById('tunjanganAnak').value) || 0;
+            const tunjanganJabatan = parseFloat(document.getElementById('tunjanganJabatan').value) || 0;
+            const tunjanganPasangan = parseFloat(document.getElementById('tunjanganPasangan').value) || 0;
+            const asuransiKesehatan = parseFloat(document.getElementById('asuransiKesehatan').value) || 0;
+            const asuransiKematian = parseFloat(document.getElementById('asuransiKematian').value) || 0;
+
+            const totalGaji = gajiPokok + tunjanganAnak + tunjanganJabatan + tunjanganPasangan;
+            const gajiBersih = totalGaji - asuransiKesehatan - asuransiKematian;
+
+            document.getElementById('outputIdGuru').textContent = `ID Guru: ${idGuru}`;
+            document.getElementById('outputNamaGuru').textContent = `Nama Guru: ${namaGuru}`;
+            document.getElementById('outputJabatan').textContent = `Jabatan: ${jabatan}`;
+            document.getElementById('outputGajiPokok').textContent = `Gaji Pokok: ${formatRupiah(gajiPokok)}`;
+            document.getElementById('outputTunjanganAnak').textContent = `Tunjangan Anak: ${formatRupiah(tunjanganAnak)}`;
+            document.getElementById('outputTunjanganJabatan').textContent = `Tunjangan Jabatan: ${formatRupiah(tunjanganJabatan)}`;
+            document.getElementById('outputTunjanganPasangan').textContent = `Tunjangan Pasangan: ${formatRupiah(tunjanganPasangan)}`;
+            document.getElementById('outputAsuransiKesehatan').textContent = `Asuransi Kesehatan: ${formatRupiah(asuransiKesehatan)}`;
+            document.getElementById('outputAsuransiKematian').textContent = `Asuransi Kematian: ${formatRupiah(asuransiKematian)}`;
+            document.getElementById('totalGaji').textContent = `Total Gaji: ${formatRupiah(totalGaji)}`;
+            document.getElementById('gajiBersih').textContent = `Gaji Bersih: ${formatRupiah(gajiBersih)}`;
+
+            document.getElementById('output').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
